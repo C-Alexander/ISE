@@ -1,5 +1,6 @@
 package com.contritio.ise.engine;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -17,7 +18,7 @@ public class GameObject {
     public void setup() {}
     public void resume() {}
     public void pause() {}
-    public void update() {}
+    public void update(OrthographicCamera camera) {}
     public void destroy() {}
     public String getName() {
         return name;

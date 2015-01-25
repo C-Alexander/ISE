@@ -1,5 +1,6 @@
 package com.contritio.ise.engine;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -43,15 +44,15 @@ public class GameObjectManager {
             }
         }
     }
-    public void update() {
+    public void update(OrthographicCamera camera) {
         if (gameObjects.gameObjects.size() > 0) {
             for (GameObject e : gameObjects.gameObjects) {
-                e.update();
+                e.update(camera);
             }
         }
         for (SpriteGameObjectList e: spriteGameObjectLists) {
             for (SpriteGameObject o: e.getGameObjects()) {
-                o.update();
+                o.update(camera);
             }
         }
     }

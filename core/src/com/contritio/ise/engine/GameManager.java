@@ -1,5 +1,6 @@
 package com.contritio.ise.engine;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -13,7 +14,7 @@ public class GameManager {
    String currentGameState;
    public static final GameManager gameManager = new GameManager();
 
-    public static GameManager getInstance() { return gameManager; };
+    public static GameManager getInstance() { return gameManager; }
 
     public void switchTo(String GameStateName) {
         if (currentGameState != null) {
@@ -30,9 +31,11 @@ public class GameManager {
         }
     }
 
-    public void run(SpriteBatch batch) {
+    public void run(SpriteBatch batch, OrthographicCamera camera) {
         if (currentGameState != null) {
-            GameState().update();
+            camera.update();
+            batch.setProjectionMatrix(camera.combined);
+            GameState().update(camera);
             GameState().draw(batch);
         } else {
             Log.debug("No GameState selected.");

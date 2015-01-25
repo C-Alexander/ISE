@@ -1,5 +1,6 @@
 package com.contritio.ise.engine;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -17,8 +18,8 @@ public class GameState {
         gameObjectManager = new GameObjectManager();
     }
 
-    public void update() {
-        GameObjectManager().update();
+    public void update(OrthographicCamera camera) {
+        GameObjectManager().update(camera);
     }
 
     public void draw(SpriteBatch batch) {
@@ -26,15 +27,15 @@ public class GameState {
         batch.draw(background, 0, 0, 960, 640);
         GameObjectManager().draw(batch);
         batch.end();
-    };
+    }
 
-    public void setup() { GameObjectManager().setup(); };
+    public void setup() { GameObjectManager().setup(); }
 
-    public void destroy() { GameObjectManager().destroy();};
+    public void destroy() { GameObjectManager().destroy();}
 
-    public void pause() { GameObjectManager().pause();};
+    public void pause() { GameObjectManager().pause();}
 
-    public void resume() { GameObjectManager().resume();};
+    public void resume() { GameObjectManager().resume();}
 
     public void addObject(GameObject object) {
         GameObjectManager().addObject(object);

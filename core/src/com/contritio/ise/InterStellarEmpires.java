@@ -1,15 +1,15 @@
 package com.contritio.ise;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.contritio.ise.engine.*;
 
 public class InterStellarEmpires extends ApplicationAdapter { //screw this name, maybe I should have just named it ISW2, but alas, there's multiple of those... suggestions would be welcome
 	SpriteBatch batch;
-	Texture backGround;
+	//Texture backGround;
+	OrthographicCamera camera;
 	//private Vector2 backGroundSize;
 	@Override
 	public void create () {
@@ -17,6 +17,8 @@ public class InterStellarEmpires extends ApplicationAdapter { //screw this name,
 		GameManager().addGameState(new TacticalScreen());
 		GameManager().switchTo("TacticalScreen");
 		Log.set(Log.LEVEL_DEBUG);
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false);
 	//	backGround = new Texture("legacy/stars.jpg");
 	//	backGroundSize = new Vector2(backGround.getWidth(), backGround.getHeight()); //Yes, I know there's a wrap method with GL. But that means needing a second batch etc.
 		//thisl do.
@@ -35,7 +37,7 @@ public class InterStellarEmpires extends ApplicationAdapter { //screw this name,
 			}
 		}
 		batch.end(); */
-		GameManager().run(batch);
+		GameManager().run(batch, camera);
 	}
 	@Override
 	public void dispose () {
@@ -52,6 +54,6 @@ public class InterStellarEmpires extends ApplicationAdapter { //screw this name,
 		GameManager().pause();
 	}
 
-	public GameManager GameManager () { return GameManager.getInstance(); };
+	public GameManager GameManager () { return GameManager.getInstance(); }
 
 }

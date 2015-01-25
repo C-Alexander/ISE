@@ -1,9 +1,11 @@
 package com.contritio.ise.engine;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 /**
  * Created by Alexander on 22/06/2014.
@@ -16,6 +18,7 @@ public class SpriteGameObject extends GameObject {
             Vector2 origin;
             Vector2 size;
             Vector2 scale;
+            Vector3 clickLocation;
             public float rotation;
             boolean flipX;
             boolean flipY;
@@ -53,16 +56,26 @@ public class SpriteGameObject extends GameObject {
         this.acceleration = acceleration;
         this.size = new Vector2(sprite.getWidth(), sprite.getHeight());
         this.origin = this.size;
-        this.scale = new Vector2(2, 2);
+        this.scale = new Vector2(1, 1); //Why did I set it to 2? Must have been some failed test...
         this.rotation = rotation;
     }
 
     @Override
-    public void update() {
-        super.update();
+    public void update(OrthographicCamera camera) {
+        super.update(camera);
         velocity.add(acceleration); //adds a vector to another vector
         //Log.debug("Velocity of " + name + " is X:" + velocity.x + " Y:" + velocity.Y);
         position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime())); //Sc1 means Scalar. It basically means multiply the vector by a float
+        if (Gdx.input.justTouched()) {
+            clickLocation = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(clickLocation);
+            if (clickLocation.x > getPosition().x
+                    && clickLocation.x < getPosition().x + getSize().x
+                    && clickLocation.y > getPosition().y
+                    && clickLocation.y < getPosition().y + getSize().y) {
+                onClick(); //tbh, I should probably use circle collision for planets, but thisl also work for ships, asteroids and such so...
+            }
+        }
     }
 
     @Override
@@ -133,4 +146,5 @@ public class SpriteGameObject extends GameObject {
     public void setScale(Vector2 scale) {
         this.scale = scale;
     }
+    public void onClick() {}
 }
