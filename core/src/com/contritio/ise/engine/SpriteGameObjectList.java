@@ -33,6 +33,7 @@ public class SpriteGameObjectList {
         Log.warn("Could not find gameobject called: " + name);
         return new SpriteGameObject("error", 0);
     }
+    public void clear() { gameObjects.clear(); }
     public ArrayList<SpriteGameObject> getGameObjects() {
         return gameObjects;
     }

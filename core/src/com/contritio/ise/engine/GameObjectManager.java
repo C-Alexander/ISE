@@ -28,7 +28,7 @@ public class GameObjectManager {
                 return e;
             }
         }
-        Log.warn("Could not find gameobject called: " + name);
+        Log.warn("Could not find gameobjectlist called: " + name);
         return new SpriteGameObjectList("error", 0);
     }
 

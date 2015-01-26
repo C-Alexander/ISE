@@ -20,7 +20,7 @@ public class GameManager {
         if (currentGameState != null) {
             if (!currentGameState.equalsIgnoreCase(GameStateName)) {
                 Log.debug("Switching GameState: " + currentGameState + " for GameState: " + GameStateName);
-                GameState().destroy();
+             //   GameState().destroy();
                 currentGameState = GameStateName;
                 GameState().setup();
             }
@@ -80,16 +80,18 @@ public class GameManager {
             }
         }
     }
-
-    public GameState GameState() {
+    public GameState GameState(String gameStateName) {
         for (GameState e: gameStates) {
             Log.trace("GameState named " + e.name + " found.");
-            if (currentGameState.equalsIgnoreCase(e.name)) {
+            if (gameStateName.equalsIgnoreCase(e.name)) {
                 Log.trace("Returning GameState:" + e.name);
                 return e;
             }
         }
         Log.error("Error, no GameState matching the currentGameState found.");
         return new GameState("NOT FOUND", new Texture("/legacy/twg.gif"));
+    }
+    public GameState GameState() {
+      return GameState(currentGameState);
     }
 }
