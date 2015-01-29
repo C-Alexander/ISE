@@ -1,6 +1,12 @@
 package com.contritio.ise.engine;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
+
 import java.util.Date;
+
+import static com.badlogic.gdx.Gdx.*;
+
 /**
  * A low overhead, lightweight logging system.
  * @author Nathan Sweet <misc@n4te.com>
@@ -220,7 +226,14 @@ public class Log {
          * Prints the message to System.out. Called by the default implementation of {@link #log(int, String, String, Throwable)}.
          */
         protected void print (String message) {
-            System.out.println(message);
+            if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+                System.out.println(message);
+            } else if (Gdx.app.getType() == Application.ApplicationType.WebGL) {
+                GWTLog(message);
+            }
         }
+        native void GWTLog(String message) /*-{
+      console.log(message);
+  }-*/;
     }
 }

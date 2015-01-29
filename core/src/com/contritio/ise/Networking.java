@@ -2,6 +2,7 @@ package com.contritio.ise;
 
 import com.badlogic.gdx.utils.Json;
 import com.contritio.ise.engine.GameManager;
+import com.contritio.ise.engine.GameState;
 import com.contritio.ise.engine.Log;
 import com.sksamuel.gwt.websockets.*;
 /**
@@ -9,6 +10,9 @@ import com.sksamuel.gwt.websockets.*;
  */
 public class Networking implements WebsocketListener {
     Json json = new Json();
+
+    public Networking() {
+    }
     @Override
     public void onClose() {
         Log.error("Connection Lost");
@@ -17,7 +21,10 @@ public class Networking implements WebsocketListener {
     @Override
     public void onMessage(String msg) {
         Log.trace("Message Received from Server: " + msg);
-        System.out.println(json.prettyPrint(msg));
+        Log.debug("Message contained following JSON: " + json.prettyPrint(msg));
+        for (GameState gs : GameManager.getInstance().GameStates()) {
+            gs.newData(json.fromJson(PacketData.class, msg));
+        }
     }
 
     @Override

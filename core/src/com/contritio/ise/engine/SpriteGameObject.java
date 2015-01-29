@@ -3,6 +3,7 @@ package com.contritio.ise.engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -17,11 +18,14 @@ public class SpriteGameObject extends GameObject {
             Vector2 acceleration;
             Vector2 origin;
             Vector2 size;
+            Vector2 textPosition;
+            Vector2 textSize;
             Vector2 scale;
             Vector3 clickLocation;
             public float rotation;
             boolean flipX;
             boolean flipY;
+            public BitmapFont font;
 
             public SpriteGameObject(String name, int layer) {
                 super(name, layer);
@@ -51,10 +55,13 @@ public class SpriteGameObject extends GameObject {
         if (sprite != null) {
             this.sprite = sprite;
         }
+        font = new BitmapFont();
         this.position = position;
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.size = new Vector2(sprite.getWidth(), sprite.getHeight());
+        textPosition = new Vector2 (0, 0);
+        textSize = new Vector2(0,0);
         this.origin = this.size;
         this.scale = new Vector2(1, 1); //Why did I set it to 2? Must have been some failed test...
         this.rotation = rotation;
@@ -66,14 +73,21 @@ public class SpriteGameObject extends GameObject {
         velocity.add(acceleration); //adds a vector to another vector
         //Log.debug("Velocity of " + name + " is X:" + velocity.x + " Y:" + velocity.Y);
         position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime())); //Sc1 means Scalar. It basically means multiply the vector by a float
-        if (Gdx.input.justTouched()) {
+        if (Gdx.input.isTouched()) {
             clickLocation = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(clickLocation);
-            if (clickLocation.x > getPosition().x
-                    && clickLocation.x < getPosition().x + getSize().x
-                    && clickLocation.y > getPosition().y
-                    && clickLocation.y < getPosition().y + getSize().y) {
-                onClick(); //tbh, I should probably use circle collision for planets, but thisl also work for ships, asteroids and such so...
+            if (pointCollision(clickLocation)) {
+                if (Gdx.input.justTouched()) {
+                    onClick(new Vector2(clickLocation.x, clickLocation.y)); //tbh, I should probably use circle collision for planets, but thisl also work for ships, asteroids and such so...
+                } else {
+                    whileClicked(new Vector2(clickLocation.x, clickLocation.y));
+                }
+            } else if (textCollision(clickLocation)) {
+                    if (Gdx.input.justTouched()) {
+                        onTextClick(new Vector2(clickLocation.x, clickLocation.y)); //tbh, I should probably use circle collision for planets, but thisl also work for ships, asteroids and such so...
+                    } else {
+                        whileTextClicked(new Vector2(clickLocation.x, clickLocation.y));
+                    }
             }
         }
     }
@@ -85,7 +99,34 @@ public class SpriteGameObject extends GameObject {
             batch.draw(sprite, position.x, position.y, origin.x, origin.y, size.x * scale.y, size.y * scale.y, 1, 1, rotation, 0, 0, sprite.getTextureData().getWidth(), sprite.getTextureData().getHeight(), flipX, flipY);
         }
     }
-
+    @Override
+    public void destroy() {
+        font.dispose();
+    }
+    public boolean pointCollision(int xPosition, int yPosition) {
+        return (pointCollision(new Vector2(xPosition, yPosition)));
+    }
+    public boolean pointCollision(Vector3 position) {
+        return (pointCollision(new Vector2(position.x, position.y)));
+    }
+    public boolean pointCollision(Vector2 position) {
+        return (generalPointCollision(position, getPosition(), getSize()));
+    }
+    public boolean textCollision(int xPosition, int yPosition) {
+        return (textCollision(new Vector2(xPosition, yPosition)));
+    }
+    public boolean textCollision(Vector3 position) {
+        return (textCollision(new Vector2(position.x, position.y)));
+    }
+    public boolean textCollision(Vector2 position) {
+        return generalPointCollision(position, textPosition, textSize);
+    }
+    private boolean generalPointCollision (Vector2 posToCheck, Vector2 posOfObject, Vector2 sizeToCheck) {
+        return (posToCheck.x > posOfObject.x
+                && posToCheck.x < posOfObject.x + sizeToCheck.x
+                && posToCheck.y > posOfObject.y
+                && posToCheck.y < posOfObject.y + sizeToCheck.y);
+    }
     public Vector2 getVelocity() {
         return velocity;
     }
@@ -103,6 +144,18 @@ public class SpriteGameObject extends GameObject {
     }
     public void setPosition(Vector2 position) {
         this.position = position;
+    }
+    public Vector2 getTextPosition() {
+        return textPosition;
+    }
+    public void setTextPosition(Vector2 textPosition) {
+        this.textPosition = textPosition;
+    }
+    public Vector2 getTextSize() {
+        return textSize;
+    }
+    public void setTextSize(Vector2 textSize) {
+        this.textSize = textSize;
     }
     public Texture getSprite() {
         return sprite;
@@ -146,5 +199,8 @@ public class SpriteGameObject extends GameObject {
     public void setScale(Vector2 scale) {
         this.scale = scale;
     }
-    public void onClick() {}
+    public void onClick(Vector2 clickLocation) {}
+    public void whileClicked(Vector2 clickLocation) {}
+    public void onTextClick(Vector2 clickLocation) {}
+    public void whileTextClicked(Vector2 clickLocation) {}
 }

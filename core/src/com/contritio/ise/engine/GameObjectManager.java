@@ -22,7 +22,7 @@ public class GameObjectManager {
         gameObjects = new GameObjectList("default", 0);
     }
 
-    public SpriteGameObjectList find(String name) {
+    public SpriteGameObjectList findList(String name) {
         for (SpriteGameObjectList e: spriteGameObjectLists) {
             if (e.name.equalsIgnoreCase(name)) {
                 return e;
@@ -115,8 +115,8 @@ public class GameObjectManager {
         spriteObjectAdder(object, list);
     }
     private void spriteObjectAdder(SpriteGameObject object, String list) {
-        find(list).getGameObjects().add(object);
-        find(list).sort();
+        findList(list).getGameObjects().add(object);
+        findList(list).sort();
     }
     private void objectAdder(GameObject object) {
         gameObjects.gameObjects.add(object);

@@ -3,12 +3,13 @@ package com.contritio.ise.engine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.contritio.ise.PacketData;
 
 /**
  * Created by Alexander on 22/06/2014.
  */
 public class GameState {
-    String name;
+    public String name;
     public Texture background;
     GameObjectManager gameObjectManager;
 
@@ -57,4 +58,5 @@ public class GameState {
     }
 
     public GameObjectManager GameObjectManager() { return gameObjectManager; }
+    public void newData(PacketData data) {}
 }

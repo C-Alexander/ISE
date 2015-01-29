@@ -10,9 +10,9 @@ import java.util.ArrayList;
  * Created by Alexander on 22/06/2014.
  */
 public class GameManager {
-   ArrayList<GameState> gameStates = new ArrayList<GameState>();
+   private ArrayList<GameState> gameStates = new ArrayList<GameState>();
    String currentGameState;
-   public static final GameManager gameManager = new GameManager();
+   private static final GameManager gameManager = new GameManager();
 
     public static GameManager getInstance() { return gameManager; }
 
@@ -94,4 +94,5 @@ public class GameManager {
     public GameState GameState() {
       return GameState(currentGameState);
     }
+    public ArrayList<GameState> GameStates() { return gameStates; }
 }
