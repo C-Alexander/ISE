@@ -30,5 +30,6 @@ public class Networking implements WebsocketListener {
     @Override
     public void onOpen() {
         Log.debug("Connection Made");
+        GameManager.getInstance().GameState().login();
     }
 }

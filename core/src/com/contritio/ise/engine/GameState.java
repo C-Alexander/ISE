@@ -3,7 +3,9 @@ package com.contritio.ise.engine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.contritio.ise.LoginData;
 import com.contritio.ise.PacketData;
+import com.google.gwt.user.client.Cookies;
 
 /**
  * Created by Alexander on 22/06/2014.
@@ -18,6 +20,11 @@ public class GameState {
         this.background = background;
         gameObjectManager = new GameObjectManager();
     }
+    public GameState(String name) {
+        this.name = name;
+        gameObjectManager = new GameObjectManager();
+    }
+
 
     public void update(OrthographicCamera camera) {
         GameObjectManager().update(camera);
@@ -25,7 +32,7 @@ public class GameState {
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-        batch.draw(background, 0, 0, 960, 640);
+        if (background != null) { batch.draw(background, 0, 0, 960, 640); }
         GameObjectManager().draw(batch);
         batch.end();
     }
@@ -58,5 +65,6 @@ public class GameState {
     }
 
     public GameObjectManager GameObjectManager() { return gameObjectManager; }
-    public void newData(PacketData data) {}
+    public void newData(PacketData data) {} // this and after is gamespecific stuff I added because reasons
+    public void login() {}
 }

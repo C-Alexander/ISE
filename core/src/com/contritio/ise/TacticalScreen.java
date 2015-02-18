@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Json;
 import com.contritio.ise.engine.*;
 import com.sksamuel.gwt.websockets.*;
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+import com.google.gwt.user.client.*;
 
 /**
  * Created by Alexander on 25/01/2015.
@@ -19,11 +19,12 @@ public class TacticalScreen extends GameState {
     private String currentSystem = "Sol";
     Websocket client = new Websocket("ws://contritio.com:11984/");
     private int konamiStage = 0;
+    Json json;
 
 
     public TacticalScreen() {
-        super("TacticalScreen", new Texture("legacy/stars.jpg"));
-        backGroundSize = new Vector2(background.getWidth(), background.getHeight());
+        super("TacticalScreen");
+        if (background != null) { backGroundSize = new Vector2(background.getWidth(), background.getHeight()); }
         addList("GiantPlanets", 0);
         addList("Planets", 1);
         addList("DwarfPlanets", 2);
@@ -32,6 +33,7 @@ public class TacticalScreen extends GameState {
         addList("StarBases", 5);
         client.addListener(new Networking());
         client.open();
+        json = new Json();
         //client.open();
     }
     @Override
@@ -42,11 +44,11 @@ public class TacticalScreen extends GameState {
     @Override
     public void draw(SpriteBatch batch) {
         batch.begin();
-        for (int x = 0; x < Gdx.graphics.getWidth(); x += backGroundSize.x) {
+       /* for (int x = 0; x < Gdx.graphics.getWidth(); x += backGroundSize.x) {
             for (int y = 0; y < Gdx.graphics.getHeight(); y += backGroundSize.y) {
                 batch.draw(background, x, y);
             }
-        }
+        } */
         GameObjectManager().draw(batch);
         batch.end();
     }
@@ -72,6 +74,9 @@ public class TacticalScreen extends GameState {
                 GameObjectManager().addObject(new Planet(planet.name, planet.texture, new Vector2(planet.xPosition, planet.yPosition)), "Planets");
             }
         }
+        if (data.message != null) {
+            Log.info(data.message);
+        }
     }
     public void konamiCode() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && konamiStage <= 1) {
@@ -91,12 +96,28 @@ public class TacticalScreen extends GameState {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.A) && (konamiStage == 9)) {
             konamiStage = 0;
-            Log.info("KonamiCode Detected. Entering System Development Mode.");
-            Log.info("Welcome, to Magrathea. ");
-            DevSystemScreen devSystemScreen = new DevSystemScreen();
-            devSystemScreen.name = "Magrathea";
-            GameManager.getInstance().addGameState(devSystemScreen);
-            GameManager.getInstance().switchTo("Magrathea");
+            if (!GameManager.getInstance().GameState().name.equalsIgnoreCase("Magrathea")) {
+                Log.info("KonamiCode Detected. Entering System Development Mode.");
+                Log.info("Welcome, to Magrathea. ");
+                DevSystemScreen devSystemScreen = new DevSystemScreen();
+                devSystemScreen.name = "Magrathea";
+                GameManager.getInstance().addGameState(devSystemScreen);
+                GameManager.getInstance().switchTo("Magrathea");
+            } else {
+                PacketData newSystem = new PacketData();
+                for (SpriteGameObject planet : GameObjectManager().findList("Planets").getGameObjects()) {
+                    //put it in the Planetdatas etc, not doing this for now as, without a website, this is impossible to secure and test properly. 
+                }
+            }
         }
+    }
+    @Override
+    public void login() {
+        super.login();
+        PacketData loginPacket = new PacketData();
+        loginPacket.loginData = new LoginData();
+        loginPacket.loginData.user_hash = Cookies.getCookie("user_hash");
+        loginPacket.loginData.user_id = Integer.parseInt(Cookies.getCookie("user_id"));
+        client.send(json.toJson(loginPacket));
     }
     }

@@ -8,4 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 public class PacketData {
     public PlanetData planetData;
     public SolarSystemData solarSystemData;
+    public LoginData loginData;
+    public String message;
 }
