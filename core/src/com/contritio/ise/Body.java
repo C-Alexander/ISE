@@ -22,8 +22,10 @@ public class Body extends SpriteGameObject {
     boolean beingDragged = false;
 public Body(String bodyName, String spriteName, Vector2 position) {
     super(bodyName, 0, new Texture(spriteName), position);
-    setTextPosition(getPosition().cpy().add(getSize().x, -getTextSize().y));
+    font = new BitmapFont(Gdx.files.internal("fonts/verdana11.fnt"),
+            Gdx.files.internal("fonts/verdana11.png"), false);
     setTextSize(new Vector2(font.getBounds(getName()).width, font.getBounds(getName()).height));
+    setTextPosition(getPosition().cpy().add(getSize().x, getTextSize().y*0.5f));
 }
 
     @Override
@@ -54,7 +56,7 @@ public Body(String bodyName, String spriteName, Vector2 position) {
     public void beingDragged(Vector3 clickLocation) {
         if (!Gdx.input.isKeyPressed(Input.Keys.Q)) {
             beingDragged = false;
-        } else {
+        } else if (beingDragged) {
             Vector2 clickLocation2 = new Vector2(clickLocation.x, clickLocation.y);
             setPosition(clickLocation2.cpy().sub(getSize().cpy().scl(0.5f)));
         }
@@ -62,6 +64,6 @@ public Body(String bodyName, String spriteName, Vector2 position) {
     @Override
     public void setPosition(Vector2 position) {
         super.setPosition(position);
-        setTextPosition(getPosition().cpy().add(getSize().x, -getTextSize().y));
+        setTextPosition(getPosition().cpy().add(getSize().x, getTextSize().y*0.5f));
     }
 }

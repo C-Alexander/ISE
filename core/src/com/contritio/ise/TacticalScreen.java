@@ -20,7 +20,7 @@ public class TacticalScreen extends GameState {
     Websocket client = new Websocket("ws://contritio.com:11984/");
     private int konamiStage = 0;
     Json json;
-
+    private boolean firstRun = true;
 
     public TacticalScreen() {
         super("TacticalScreen");
@@ -40,6 +40,10 @@ public class TacticalScreen extends GameState {
     public void update(OrthographicCamera camera) {
         super.update(camera);
         konamiCode();
+        if (firstRun) {
+            prepareCanvas();
+            firstRun = false;
+        }
     }
     @Override
     public void draw(SpriteBatch batch) {
@@ -120,4 +124,7 @@ public class TacticalScreen extends GameState {
         loginPacket.loginData.user_id = Integer.parseInt(Cookies.getCookie("user_id"));
         client.send(json.toJson(loginPacket));
     }
+    public static native void prepareCanvas() /*-{
+            $doc.getElementsByTagName('canvas')[0].className = 'Tac';
+    }-*/;
     }

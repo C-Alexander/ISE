@@ -9,4 +9,5 @@
 	<entry-point class='com.contritio.ise.client.HtmlLauncher' />
 	
 	<set-configuration-property name="gdx.assetpath" value="../core/assets" />
+    <set-property name="user.agent" value="safari"/> <!-- remove for production - makes it so it only compiles for Chrome and Safari to save compilation time -->
 </module>
