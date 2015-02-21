@@ -22,8 +22,8 @@ public class Body extends SpriteGameObject {
     boolean beingDragged = false;
 public Body(String bodyName, String spriteName, Vector2 position) {
     super(bodyName, 0, new Texture(spriteName), position);
-    font = new BitmapFont(Gdx.files.internal("fonts/verdana11.fnt"),
-            Gdx.files.internal("fonts/verdana11.png"), false);
+    font = new BitmapFont(Gdx.files.internal("fonts/roboto.fnt"),
+            Gdx.files.internal("fonts/roboto.png"), false);
     setTextSize(new Vector2(font.getBounds(getName()).width, font.getBounds(getName()).height));
     setTextPosition(getPosition().cpy().add(getSize().x, getTextSize().y*0.5f));
 }
