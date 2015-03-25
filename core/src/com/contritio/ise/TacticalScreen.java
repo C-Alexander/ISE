@@ -30,6 +30,7 @@ public class TacticalScreen extends GameState {
         addList("Asteroids", 3);
         addList("Ships", 4);
         addList("StarBases", 5);
+        NetworkManager.getInstance();
     }
     @Override
     public void update(OrthographicCamera camera) {
