@@ -17,9 +17,8 @@ import com.google.gwt.user.client.*;
 public class TacticalScreen extends GameState {
     private Vector2 backGroundSize;
     private String currentSystem = "Sol";
-    Websocket client = new Websocket("ws://contritio.com:11984/");
     private int konamiStage = 0;
-    Json json;
+
     private boolean firstRun = true;
 
     public TacticalScreen() {
@@ -31,10 +30,6 @@ public class TacticalScreen extends GameState {
         addList("Asteroids", 3);
         addList("Ships", 4);
         addList("StarBases", 5);
-        client.addListener(new Networking());
-        client.open();
-        json = new Json();
-        //client.open();
     }
     @Override
     public void update(OrthographicCamera camera) {
@@ -118,11 +113,7 @@ public class TacticalScreen extends GameState {
     @Override
     public void login() {
         super.login();
-        PacketData loginPacket = new PacketData();
-        loginPacket.loginData = new LoginData();
-        loginPacket.loginData.user_hash = Cookies.getCookie("user_hash");
-        loginPacket.loginData.user_id = Integer.parseInt(Cookies.getCookie("user_id"));
-        client.send(json.toJson(loginPacket));
+        NetworkManager.getInstance().login();
     }
     public static native void prepareCanvas() /*-{
             $doc.getElementsByTagName('canvas')[0].className = 'Tac';

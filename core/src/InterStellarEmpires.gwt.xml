@@ -5,5 +5,7 @@
 	<extend-configuration-property name="gdx.reflect.include" value="com.contritio.ise.SolarSystemData" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.contritio.ise.PlanetData" />
     <extend-configuration-property name="gdx.reflect.include" value="com.contritio.ise.LoginData" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.contritio.ise.ChatData" />
+    <extend-configuration-property name="gdx.reflect.include" value="com.contritio.ise.ChatMessage" />
 	<source path="com/contritio/ise" />
 </module>
